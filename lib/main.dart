@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/pages/home.dart';
+import 'package:todo_app/theme/themes.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()) );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,9 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ToDo App',
-      theme: ,
-      home: ,
+      title: 'To-Do List',
+      theme: AppTheme.darkMode,
+      debugShowCheckedModeBanner: false,
+      home: MyHome(),
     );
   }
 }

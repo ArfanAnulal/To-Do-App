@@ -5,6 +5,9 @@ class AppTheme{
   static const Color secondaryColor = Color(0xFF7DF9FF);
   static const Color cardBackgroundColor = Color(0xFF16213E);
   static const Color primaryAccent = Color(0xFFF07DEA);
+  static  ShapeBorder cardShape = RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            );
 
 
   static final ThemeData darkMode = ThemeData(
@@ -15,11 +18,15 @@ class AppTheme{
     ),
     scaffoldBackgroundColor: appBackgroundColor,
     cardColor: cardBackgroundColor,
+    cardTheme: CardThemeData(
+      color: cardBackgroundColor,
+      shape: cardShape
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryAccent
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty(),
+      checkColor: WidgetStateProperty.all(appBackgroundColor),
     )
   );
 }
@@ -32,36 +39,5 @@ class AppTextTheme{
     fontWeight: FontWeight.bold,
     fontSize: 30
   );
-
-  static const TextStyle fieldText = TextStyle(
-    color: textFieldFontColor,
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    
-  );
-
-  static const TextStyle formHeading =TextStyle(
-    color: textFieldFontColor,
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
-  );
-
-  static const TextStyle bioName = TextStyle(
-    color: textFieldFontColor,
-    fontSize: 40,
-    fontWeight: FontWeight.bold
-  );
-
-  static const TextStyle bioDesignation = TextStyle(
-    color: textFieldFontColor,
-    fontSize: 20,
-    fontWeight: FontWeight.w500
-  ); 
-
-  static const TextStyle bioBio = TextStyle(
-    color: textFieldFontColor,
-    fontSize: 15,
-    fontWeight: FontWeight.normal
-  );  
   
 }
