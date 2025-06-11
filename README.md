@@ -22,14 +22,14 @@ This app features a custom dark-mode theme with vibrant, colorful accents to cre
     <td align="center">
       <img src="documentation/seeTask.png" alt="See Task" width="250">
       <br>
-      <sub><b>Validation Snack Bar</b></sub>
+      <sub><b>See Data Screen</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center">
       <img src="documentation/completeTask.png" alt="Complete Task" width="250">
       <br>
-      <sub><b>Form Validation Error</b></sub>
+      <sub><b>Finish Task</b></sub>
     </td>
     <td align="center">
       <img src="documentation/demo.gif" alt="Demo" width="250">
