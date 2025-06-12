@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app/models/todo.dart';
 import 'package:todo_app/providers/todo_provider.dart';
 import 'package:todo_app/theme/themes.dart';
 
 class MyHome extends ConsumerWidget {
-  MyHome({super.key});
-  final todoListProvider = NotifierProvider<TodoListNotifier, List<Todo>>(
-    TodoListNotifier.new,
-  );
-
+  const MyHome({super.key});
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void showAddTaskSheet(BuildContext context, WidgetRef ref) {
@@ -58,11 +54,17 @@ class MyHome extends ConsumerWidget {
       );
     }
 
+
     final todos = ref.watch(todoListProvider);
+    final modes = ref.watch(modeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('To-Do List', style: AppTextTheme.appBarText),
         centerTitle: true,
+        actions: [Switch(value: modes, onChanged: (bool value){
+          ref.read(modeNotifierProvider.notifier).toggleMode();
+          
+        }, activeColor: AppTheme.primaryAccent,)],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -70,7 +72,6 @@ class MyHome extends ConsumerWidget {
         itemBuilder: (context, index) {
           final todo = todos[index];
           return Card(
-            color: AppTheme.cardBackgroundColor,
             shape: AppTheme.cardShape,
             margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: ListTile(
