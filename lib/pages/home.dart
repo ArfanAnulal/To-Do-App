@@ -1,34 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app/models/todo.dart';
 import 'package:todo_app/providers/todo_provider.dart';
-import 'package:todo_app/theme/themes.dart';
 
 class MyHome extends ConsumerWidget {
-  MyHome({super.key});
-  final todoListProvider = NotifierProvider<TodoListNotifier, List<Todo>>(
-    TodoListNotifier.new,
-  );
+  const MyHome({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
+    //Watching providers
+    final isDarkMode = ref.watch(modeNotifierProvider);
+    final todos = ref.watch(todoListProvider);
+
+    final theme = Theme.of(context);
+
+    //bottom sheet to add tasks
     void showAddTaskSheet(BuildContext context, WidgetRef ref) {
       final TextEditingController textController = TextEditingController();
 
       showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
+        useSafeArea: true, 
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         builder: (BuildContext context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: 30, top: 20, left: 20, right: 20),
+            padding: EdgeInsets.only(
+              bottom:  MediaQuery.of(context).viewInsets.bottom, 
+              top: 20,
+              left: 20,
+              right: 20,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                 Text(
                   'Add a New Task',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, decoration: TextDecoration.none, color: isDarkMode? Color(0xFF757575):Colors.black),
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -43,10 +53,10 @@ class MyHome extends ConsumerWidget {
                 ElevatedButton(
                   child: const Text('Add Task'),
                   onPressed: () {
-                    final String title = textController.text;
-                    if (title.trim().isNotEmpty) {
+                    final String title = textController.text.trim();
+                    if (title.isNotEmpty) {
                       ref.read(todoListProvider.notifier).addTodo(title);
-                      Navigator.pop(context); 
+                      Navigator.pop(context);
                     }
                   },
                 ),
@@ -56,47 +66,47 @@ class MyHome extends ConsumerWidget {
           );
         },
       );
-    }
+    }   
 
-    final todos = ref.watch(todoListProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('To-Do List', style: AppTextTheme.appBarText),
-        centerTitle: true,
+        title: const Text('To-Do List'),
+        actions: [
+          Switch(
+            padding: EdgeInsets.all(15),
+            thumbIcon: isDarkMode? WidgetStateProperty.all(Icon(Icons.dark_mode)):WidgetStateProperty.all(Icon(Icons.light_mode)),
+            value: isDarkMode,
+            onChanged: (bool value) {
+              ref.read(modeNotifierProvider.notifier).toggleMode();
+            },
+            activeColor: theme.floatingActionButtonTheme.backgroundColor,
+          ),
+        ],
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         itemCount: todos.length,
         itemBuilder: (context, index) {
           final todo = todos[index];
+          final textStyle = todo.isDone
+              ? theme.textTheme.bodyMedium 
+              : theme.textTheme.bodyLarge; 
+
           return Card(
-            color: AppTheme.cardBackgroundColor,
-            shape: AppTheme.cardShape,
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
             child: ListTile(
               leading: Checkbox(
                 value: todo.isDone,
                 onChanged: (value) {
                   ref.read(todoListProvider.notifier).toggleTodoStatus(index);
                 },
-                activeColor: const Color(0xFFF07DEA),
               ),
               title: Text(
                 todo.title,
-                style: TextStyle(
-                  color: todo.isDone
-                      ? const Color(0xFF888888)
-                      : const Color(0xFFEFEFEF),
-                  decoration: todo.isDone
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                ),
+                style: textStyle, 
               ),
               trailing: IconButton(
-                icon: const Icon(
-                  Icons.delete_outline,
-                  color: Color(0xFFE94560),
-                ),
+                icon: const Icon(Icons.delete_outline),
                 onPressed: () {
                   ref.read(todoListProvider.notifier).removeTodo(index);
                 },
@@ -106,15 +116,17 @@ class MyHome extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        splashColor: Color.fromARGB(255, 93, 34, 93),
         onPressed: () {
           showAddTaskSheet(context, ref);
         },
-        shape: CircleBorder(),
-        child: Icon(size: 35, Icons.add),
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, size: 35),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(color: Color.fromARGB(255, 13, 13, 35)),
+      bottomNavigationBar: const BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8.0,
+      ),
     );
   }
 }

@@ -26,3 +26,27 @@ class TodoListNotifier extends Notifier<List<Todo>> {
     state = List.from(state)..removeAt(index);
   }
 }
+
+final todoListProvider = NotifierProvider<TodoListNotifier, List<Todo>>(
+    TodoListNotifier.new,
+  );
+
+class ModeNotifier extends Notifier<bool>{
+  @override
+  bool build() {
+    return false;
+    
+  }
+
+  void toggleMode(){
+    state = !state;
+  }
+
+  
+  
+
+
+}
+final modeNotifierProvider = NotifierProvider<ModeNotifier, bool>(
+    ModeNotifier.new,
+  );
