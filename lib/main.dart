@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/pages/home.dart';
-import 'package:todo_app/providers/todo_provider.dart';
+import 'package:todo_app/providers/mode_provider.dart';
 import 'package:todo_app/theme/themes.dart';
 
 
