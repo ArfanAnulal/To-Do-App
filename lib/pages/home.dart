@@ -4,11 +4,23 @@ import 'package:todo_app/providers/mode_provider.dart';
 import 'package:todo_app/providers/todo_provider.dart';
 import 'package:todo_app/theme/themes.dart';
 
-class MyHome extends ConsumerWidget {
+
+
+class MyHome extends ConsumerStatefulWidget {
   const MyHome({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends ConsumerState<MyHome> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(todoListProvider.notifier).loadTodos());
+  }
+@override
+  Widget build(BuildContext context) {
     
     //Watching providers
     final isDarkMode = ref.watch(modeNotifierProvider);
@@ -101,7 +113,7 @@ class MyHome extends ConsumerWidget {
               leading: Checkbox(
                 value: todo.isDone,
                 onChanged: (value) {
-                  ref.read(todoListProvider.notifier).toggleTodoStatus(index);
+                  ref.read(todoListProvider.notifier).toggleTodoStatus(todo);
                 },
               ),
               title: Text(
@@ -111,7 +123,7 @@ class MyHome extends ConsumerWidget {
               trailing: IconButton(
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () {
-                  ref.read(todoListProvider.notifier).removeTodo(index);
+                  ref.read(todoListProvider.notifier).removeTodo(todo.id!);
                 },
               ),
             ),
