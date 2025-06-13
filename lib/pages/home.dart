@@ -17,7 +17,10 @@ class _MyHomeState extends ConsumerState<MyHome> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(todoListProvider.notifier).loadTodos());
+    Future.microtask(() {
+      ref.read(todoListProvider.notifier).loadTodos();
+      ref.read(modeNotifierProvider.notifier).loadMode();
+    });
   }
 @override
   Widget build(BuildContext context) {
