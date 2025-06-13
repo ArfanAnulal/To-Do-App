@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+
+  // bottom sheet title color
+  static const Color darkModeTextColor = Color(0xFF757575);
+  static const Color lightModeTextColor = Color(0xFF000000);
+
   // dark mode
   static const Color darkAppBackgroundColor = Color(0xFF1A1A2E);
   static const Color darkSecondaryColor = Color(0xFF7DF9FF); // For AppBar title

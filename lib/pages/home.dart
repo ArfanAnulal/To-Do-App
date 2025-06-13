@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/providers/mode_provider.dart';
 import 'package:todo_app/providers/todo_provider.dart';
+import 'package:todo_app/theme/themes.dart';
 
 class MyHome extends ConsumerWidget {
   const MyHome({super.key});
@@ -39,7 +40,8 @@ class MyHome extends ConsumerWidget {
               children: [
                  Text(
                   'Add a New Task',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, decoration: TextDecoration.none, color: isDarkMode? Color(0xFF757575):Colors.black),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, 
+                  decoration: TextDecoration.none, color: isDarkMode? AppTheme.darkModeTextColor: AppTheme.lightModeTextColor),
                 ),
                 const SizedBox(height: 16),
                 TextField(
