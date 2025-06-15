@@ -1,11 +1,11 @@
-# **To-Do List App - A Riverpod Project**
+# **Fully-Featured To-Do App**
 
-A sleek, modern, and fully functional To-Do List application built with Flutter. This project showcases an advanced, scalable architecture using Riverpod for state management, moving beyond basic state handling to a professional, industry-standard pattern.
+A beautiful, fully persistent To-Do list application built with Flutter. This project demonstrates a complete, professional-grade mobile app architecture, featuring advanced state management with Riverpod, local persistence with a Sembast database, and a dynamic, themeable UI.
 
 
 ## **📸 Demo & Screenshots**
 
-This app features a custom dark-mode theme with vibrant, colorful accents to create an engaging user experience.
+This app features a fully switchable light/dark mode theme with vibrant, colorful accents to create an engaging user experience.
 
 <table>
   <tr>
@@ -15,27 +15,38 @@ This app features a custom dark-mode theme with vibrant, colorful accents to cre
       <sub><b>Home Screen</b></sub>
     </td>
     <td align="center">
+      <img src="documentation/darkHome.png" alt="Home Screen Dark" width="250">
+      <br>
+      <sub><b>Home Screen Dark</b></sub>
+    </td>
+    <td align="center">
       <img src="documentation/addTask.png" alt="Enter Task" width="250">
       <br>
-      <sub><b>Enter Data Screen</b></sub>
+      <sub><b>Enter Task</b></sub>
     </td>
+  <tr>
     <td align="center">
       <img src="documentation/seeTask.png" alt="See Task" width="250">
       <br>
-      <sub><b>See Data Screen</b></sub>
+      <sub><b>See Task</b></sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <img src="documentation/completeTask.png" alt="Complete Task" width="250">
       <br>
-      <sub><b>Finish Task</b></sub>
+      <sub><b>Complete Task</b></sub>
     </td>
+    <td align="center">
+      <img src="documentation/completeTaskDark.png" alt="Complete Task Dark" width="250">
+      <br>
+      <sub><b>Complete Task Dark</b></sub>
+    </td>
+  </tr>
     <td align="center">
       <img src="documentation/demo.gif" alt="Demo" width="250">
       <br>
       <sub><b>Demo</b></sub>
     </td>
+  <tr>
   </tr>
 </table>
 
@@ -45,14 +56,11 @@ This app features a custom dark-mode theme with vibrant, colorful accents to cre
 
 
 * **Full CRUD Functionality:** Create, Read, Update (toggle status), and Delete tasks.
-* **Advanced State Management:** Architected with **Riverpod**, separating business logic from the UI for a clean, scalable, and testable codebase.
-* **Reactive UI:** The UI instantly reacts to any changes in the application state, providing a seamless user experience.
-* **Modern UI/UX:**
-    * A custom, dark-mode-centric theme.
-    * Smooth animations for adding and removing tasks.
-    * A modal bottom sheet for adding new tasks without leaving the main screen.
-* **Immutable State:** Follows best practices by treating state as immutable, ensuring predictable and bug-free state transitions.
-* **Optimized for Performance:** Uses ListView.builder to efficiently handle and display even very long lists of tasks.
+* **Persistent Local Storage:** All tasks and theme settings are saved on-device using the **Sembast NoSQL database**. Your list is always there, even after closing the app.
+* **Advanced State Management:** Architected with **Riverpod**, featuring multiple providers (TodoListNotifier, ModeNotifier) for a clean, decoupled, and scalable state.
+* **Dual Theming System:** A complete, switchable light & dark mode system built with a centralized ThemeData class.
+* **Professional Polish:** Features a native splash screen and adaptive app icons.
+* **Modern & Reactive UI:** Built with ListView.builder for performance and a modern UI featuring a docked FloatingActionButton and a modal bottom sheet for adding tasks.
 
 
 ## **🛠️ Technologies & Packages Used**
@@ -61,44 +69,34 @@ This app features a custom dark-mode theme with vibrant, colorful accents to cre
 
 * **Core:** Flutter, Dart
 * **State Management:** flutter_riverpod
+* **Database:** sembast, path_provider, path
+* **Dev Tools & Assets:** flutter_launcher_icons, flutter_native_splash
 
 
-## **🚀 The Architectural Leap: From setState to Riverpod**
+## **🚀 Architectural Highlights**
 
-This project represents the next step in my Flutter development journey, building directly on the fundamentals learned in my earlier "Profile Builder" app. The primary goal here was to master professional state management.
-
-While setState is excellent for local widget state, it becomes difficult to manage when multiple screens need to share and modify the same data. This app solves that problem by using Riverpod to create a centralized, reliable "source of truth" for the application's state.
-
-This demonstrates an understanding of:
-
-
-
-* **Separation of Concerns:** The UI (home.dart) is only responsible for displaying data and forwarding user events. The logic (todo_provider.dart) is responsible for managing the state.
-* **Dependency Injection:** Riverpod provides a clean way to access business logic from the UI without tight coupling.
-* **Immutability:** Understanding why mutating state directly is problematic and how to correctly create new states for a predictable application.
-
-
-## **💡 How It Works: The Riverpod Pattern**
-
-The application's architecture is centered around a NotifierProvider:
+This project was built to demonstrate a robust, professional-grade Flutter architecture.
 
 
 
-1. **todo.dart (The Model):** A simple class that defines the structure of a single to-do item (title and isDone).
-2. **todo_provider.dart (The Brain):**
-    * A TodoListNotifier class holds the list of todos and contains all the methods to modify it (addTodo, removeTodo, toggleTodoStatus).
-    * A global todoListProvider is defined, which allows any widget in the app to access the TodoListNotifier.
-3. **home.dart (The UI):**
-    * The HomeScreen is a ConsumerWidget, which can "listen" to providers.
-    * It uses **ref.watch()** to get the list of todos and automatically rebuild when the list changes.
-    * It uses **ref.read()** within onPressed callbacks to call functions on the notifier (e.g., ref.read(todoListProvider.notifier).addTodo(...)) without causing unnecessary rebuilds.
-4. **main.dart (The Root):** The entire application is wrapped in a ProviderScope to make all providers available throughout the widget tree.
+1. **Sembast Database & Persistence Layer**
+    * A **Singleton pattern** (SembastDatabase class) is used to ensure a single, safe, and globally accessible database connection throughout the app's lifecycle.
+    * The database is initialized asynchronously in main.dart *before* the app runs, guaranteeing it's available to all widgets from the start.
+    * Data models (Todo) include toJson and fromJson methods to handle serialization, translating Dart objects into a storable JSON format.
+2. **State Management with Riverpod**
+    * A **multi-provider** approach cleanly separates concerns. TodoListNotifier handles the core CRUD logic for tasks, while ModeNotifier independently manages the UI theme.
+    * Notifiers interact directly with the Sembast database, acting as a repository layer that abstracts the data source from the UI.
+    * The UI is built with ConsumerStatefulWidget to allow for initial data loading in initState, and uses ref.watch to reactively rebuild when the state changes and ref.read to safely call methods.
+3. **Centralized Theming System**
+    * A single AppTheme class in themes.dart defines all colors, text styles, and component themes (CardThemeData, AppBarTheme, etc.) for both light and dark modes.
+    * The root MaterialApp widget watches the modeNotifierProvider to dynamically switch between AppTheme.lightMode and AppTheme.darkMode, ensuring the entire app's look and feel is consistent and easy to manage from one file.
 
 
 ## **📈 Future Improvements**
 
 
 
-* **Persistence:** Use a package like shared_preferences or a database like Hive to save the to-do list locally so it persists between app launches.
-* **Firebase Integration:** Move the state to a Firestore backend to allow for real-time syncing across multiple devices.
-* **Animations:** Add custom animations for when tasks are added or removed to further enhance the user experience.
+* **Cloud Sync:** Integrate with a backend service like Firebase Firestore to sync the to-do list across multiple devices in real-time.
+* **Task Categories:** Add the ability to create and assign categories or tags to tasks.
+* **Due Dates & Notifications:** Implement a date picker to add deadlines and use flutter_local_notifications to send reminders.
+* **UI Animations:** Add AnimatedList or custom animations for a more fluid user experience when adding or removing tasks.
